@@ -1,0 +1,13 @@
+set dotenv-path := "./prod.env"
+engine := `if command -v docker >/dev/null 2>&1; then echo "docker"; else echo "podman"; fi`
+
+up:
+    just down
+    {{engine}} compose -f ./compose.yml up --build --pull always -d
+
+down:
+    {{engine}} compose -f ./compose.yml down --volumes --remove-orphans
+    {{engine}} network prune -f
+
+create_token username:
+    {{engine}} exec -it attic sh -c 'atticadm make-token --sub "{{username}}" --validity "10y" --pull "*" --push "*" --create-cache "*" --configure-cache "*" --configure-cache-retention "*" --destroy-cache "*" --delete "*" -f "./attic/server.toml"'

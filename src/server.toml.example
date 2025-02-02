@@ -1,0 +1,22 @@
+listen = "[::]:8080"
+# .env ATTIC_SERVER_TOKEN_HS256_SECRET_BASE64=<openssl rand 64 | base64 -w0>
+
+[database]
+url = "postgres://attic:attic@db:5432/attic_prod"
+
+[storage]
+type = "local"
+path = "/attic/storage"
+
+[chunking]
+nar-size-threshold = 65536
+min-size = 16384
+avg-size = 65536
+max-size = 262144
+
+[compression]
+type = "zstd"
+
+[garbage-collection]
+# interval = "12 hours"
+interval = "7 days"
