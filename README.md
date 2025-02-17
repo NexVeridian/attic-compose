@@ -66,12 +66,16 @@ Add the token from `just create_token` to your repository secrets `https://githu
 steps:
   - uses: actions/checkout@v3
   - uses: DeterminateSystems/nix-installer-action@main
-  - run: nix run -I nixpkgs=channel:nixos-unstable nixpkgs#attic-client login <pick a name for server> https://nix.example.com ${{ secrets.ATTIC_TOKEN }}
+  - run: nix run -I nixpkgs=channel:nixos-unstable nixpkgs#attic-client login <pick a name for server> https://nix.example.com ${{ secrets.ATTIC_TOKEN }} || true
   - run: nix run -I nixpkgs=channel:nixos-unstable nixpkgs#attic-client cache create <cache name> || true
-  - run: nix run -I nixpkgs=channel:nixos-unstable nixpkgs#attic-client use <cache name>
+  - run: nix run -I nixpkgs=channel:nixos-unstable nixpkgs#attic-client use <cache name> || true
 
   - run: nix flake check --all-systems
 
+  - run: |
+      for i in {1..5}; do
+        nix run -I nixpkgs=channel:nixos-unstable nixpkgs#attic-client push <cache name> /nix/store/*/ && break || [ $i -eq 5 ] || sleep 5
+      done
   - run: nix run -I nixpkgs=channel:nixos-unstable nixpkgs#attic-client push <cache name> /nix/store/*/ || true
 ```
 

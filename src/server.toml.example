@@ -18,5 +18,4 @@ max-size = 262144
 type = "zstd"
 
 [garbage-collection]
-# interval = "12 hours"
-interval = "7 days"
+interval = "12 hours"

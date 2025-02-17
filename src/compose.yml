@@ -1,9 +1,8 @@
 services:
   attic:
     container_name: attic
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/zhaofengli/attic:latest
+    command: ["-f", "/attic/server.toml"]
     restart: unless-stopped
     ports:
       - 8080:8080
@@ -11,6 +10,7 @@ services:
       attic:
       db:
     volumes:
+      - ./server.toml:/attic/server.toml
       - attic-data:/attic/storage
     env_file:
       - prod.env
