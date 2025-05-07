@@ -70,7 +70,9 @@ steps:
   - run: nix run -I nixpkgs=channel:nixos-unstable nixpkgs#attic-client cache create <cache name> || true
   - run: nix run -I nixpkgs=channel:nixos-unstable nixpkgs#attic-client use <cache name> || true
 
-  - run: nix flake check --all-systems
+  # `nix-fast-build` is faster then `nix flake check` in my testing, and has support for pushing to attic after each build is finished
+  # - run: nix flake check --all-systems
+  - run: nix run -I nixpkgs=channel:nixos-unstable nixpkgs#nix-fast-build -- --attic-cache <cache name> --no-nom --skip-cached
 
   - run: |
       for i in {1..5}; do
