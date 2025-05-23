@@ -1,10 +1,10 @@
 # Attic Compose
-Deploying Attic Nix Binary Cache With Docker Compose
+Deploying [Attic](github.com/zhaofengli/attic) Nix Binary Cache With Docker Compose
 
 ## Server Install
 Install docker and docker compose
 
-`git clone`
+`git clone git@github.com:NexVeridian/attic-compose.git`
 
 See [/scr](./src), create a `prod.env` and `server.toml` files
 
@@ -31,7 +31,7 @@ labels:
 If you are using cloudflare make the subdomain DNS only
 
 ### Check if it works
-If working nix.example.com should say `attic push`
+If working `nix.example.com` should say `attic push`
 
 ## Client Install
 Install `pkg.attic-client`
@@ -61,7 +61,7 @@ attic push <cache name> /nix/store/*/
 ```
 
 ## Github Actions Install
-Add the token from `just create_token` to your repository secrets `https://github.com/<username>/<repo>/settings/secrets/actions`
+Add the token named from `just create_token`, named ATTIC_TOKEN, to your repository secrets `https://github.com/<username>/<repo>/settings/secrets/actions`
 ```yaml
 steps:
   - uses: actions/checkout@v3
@@ -78,7 +78,6 @@ steps:
       for i in {1..5}; do
         nix run -I nixpkgs=channel:nixos-unstable nixpkgs#attic-client push <cache name> /nix/store/*/ && break || [ $i -eq 5 ] || sleep 5
       done
-  - run: nix run -I nixpkgs=channel:nixos-unstable nixpkgs#attic-client push <cache name> /nix/store/*/ || true
 ```
 
 # License
